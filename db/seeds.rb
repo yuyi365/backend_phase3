@@ -1,5 +1,50 @@
-puts "🌱 Seeding spices..."
+require 'faker'
+require 'activerecord-reset-pk-sequence'
 
-# Seed your database here
+User.destroy_all
+List.destroy_all
+Item.destroy_all
+Category.destroy_all
+User.reset_pk_sequence
+List.reset_pk_sequence
+Item.reset_pk_sequence
+Category.reset_pk_sequence
 
-puts "✅ Done seeding!"
+puts '🌱 Seeding spices...'
+
+puts 'User...'
+
+num_categories = 4
+
+u1 =
+  User.create(
+    first_name: Faker::Name.first_name,
+    last_name: Faker::Name.last_name,
+    email: Faker::Internet.email,
+  )
+
+puts 'Lists...'
+
+2.times { List.create(user_id: u1.id, name: Faker::Hobby.activity) }
+
+puts 'Items...'
+
+10.times do
+  List.all.each do |l|
+    Item.create(
+      name: Faker::Food.ingredient,
+      category_id: rand(1..num_categories),
+      list_id: l.id,
+      quantity: rand(1..25),
+      min_quantity: rand(1..25),
+      notes: Faker::Food.description,
+      image: Faker::Placeholdit.image,
+    )
+  end
+end
+
+puts 'Category...'
+
+num_categories.times { Category.create(name: Faker::Food.ethnic_category) }
+
+puts '✅ Done seeding!'
