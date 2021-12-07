@@ -28,12 +28,17 @@ class ApplicationController < Sinatra::Base
 
   patch '/items/:id' do
     item = Item.find(params[:id])
-    item.update(quantity: params[:quantity])
+    item.update(
+      quantity: params[:quantity],
+      min_quantity: params[:min_quantity],
+      notes: params[:notes],
+      name: params[:name],
+    )
     item.to_json
   end
 
   post '/items' do
-    category_id = Category.find_by(name: params[:category]).id
+    category_id = Category.find_or_create_by(name: params[:category]).id
     item =
       Item.create(
         name: params[:name],
@@ -56,5 +61,10 @@ class ApplicationController < Sinatra::Base
   post '/categories' do
     category = Category.create(name: params[:name])
     category.to_json
+  end
+
+  post '/lists' do
+    list = List.create(name: params[:name], user_id: params[:user_id])
+    list.to_json
   end
 end
