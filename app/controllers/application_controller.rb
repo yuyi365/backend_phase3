@@ -67,4 +67,10 @@ class ApplicationController < Sinatra::Base
     list = List.create(name: params[:name], user_id: params[:user_id])
     list.to_json
   end
+
+  delete '/lists/:id' do
+    list = List.find(params[:id])
+    list.destroy
+    list.to_json
+  end
 end

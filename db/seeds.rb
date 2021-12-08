@@ -31,14 +31,15 @@ puts 'Items...'
 
 10.times do
   List.all.each do |l|
+    ingredient = Faker::Food.ingredient
     Item.create(
-      name: Faker::Food.ingredient,
+      name: ingredient,
       category_id: rand(1..num_categories),
       list_id: l.id,
       quantity: rand(1..25),
       min_quantity: rand(1..25),
       notes: Faker::Food.description,
-      image: Faker::Placeholdit.image,
+      image: Faker::LoremFlickr.image(search_terms: [ingredient]),
     )
   end
 end
